@@ -50,12 +50,11 @@ def printGround() :
                 case 0 :
                     r += '■'    
                 case 1 :
-                    r += str(ground[i][j])
+                    r += '□' if ground[i][j] == 0 else ('★' if ground[i][j] == 'm' else str(ground[i][j]))
                 case 2 :
                     r += '▶'
             r += ' '
         print(r)
-
 
 def openBlankTile(x, y, _check = []) :
     check = _check
@@ -64,7 +63,6 @@ def openBlankTile(x, y, _check = []) :
     if ground[y][x] != 0 :
         viewPoint[y][x] = 1
         return
-    # print(str(x), str(y))
     viewPoint[y][x] = 1
     recursionPos = [[y - 1, x - 1], [y - 1, x], [y - 1, x + 1], [y, x - 1], [y, x + 1], [y + 1, x - 1], [y + 1, x], [y + 1, x + 1]]
 
@@ -74,6 +72,15 @@ def openBlankTile(x, y, _check = []) :
         if i in check :
             continue
         openBlankTile(i[1], i[0], check)
+
+def openAllTile() :
+    _i = 0
+    for i in viewPoint :
+        _j = 0
+        for j in i :
+            viewPoint[_i][_j] = 1
+            _j += 1
+        _i += 1
 
 def isGameEnded() :
     for i in range(16) :
@@ -96,10 +103,14 @@ def createGround(startX, startY, _count_mine = 40) :
             continue
 
         if ground[y][x] != 'm' : 
-            ground[y][x] = 'm'
-            
-            recursionPos = [[startY - 1, startX - 1], [startY - 1, startX], [startY - 1, startX + 1], [startY, startX - 1], [startY, startX], [startY, startX + 1], [startY + 1, startX - 1], [startY + 1, startX], [startY + 1, startX + 1]]
-            if not ([y, x] in recursionPos) :
+            recursionPos = [
+                [startY - 1, startX - 1], [startY - 1, startX], [startY - 1, startX + 1], 
+                [startY,     startX - 1], [startY,     startX], [startY,     startX + 1], 
+                [startY + 1, startX - 1], [startY + 1, startX], [startY + 1, startX + 1]
+            ]
+            if not [y, x] in recursionPos :
+                ground[y][x] = 'm'
+
                 for i in range(y - 1 if y > 0 else 0, y + 2 if y < 15 else 16) : # y축
                     for j in range(x - 1 if x > 0 else 0, x + 2 if x < 15 else 16) : # x축
                         if ground[i][j] == 'm' or (startX == j and startY == i) :
@@ -135,13 +146,17 @@ while True :
                 else :
                     viewPoint[pos[1] - 1][pos[0] - 1] = 2
         else :
+            if viewPoint[pos[1] - 1][pos[0] - 1] == 2 :
+                continue
+
             match ground[pos[1] - 1][pos[0] - 1] :
                 case 'm' :
+                    openAllTile()
+                    printGround()
                     print('Game Over')
                     break
                 case 0 :
                     openBlankTile(pos[0] - 1, pos[1] - 1)
-                    # print(ground[pos[1] - 1][pos[0] - 1] != 0)
                 case _ :
                     viewPoint[pos[1] - 1][pos[0] - 1] = 1
                     if viewPoint[pos[1] - 1][pos[0] - 1] == 2 :
