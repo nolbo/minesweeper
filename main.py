@@ -118,13 +118,6 @@ def createGround(startX, startY, _count_mine = 40) :
                         ground[i][j] += 1
                 count_mine -= 1
 
-
-    for i in range(16) :
-        r = ''
-        for j in range(16) :
-            r += str(ground[i][j]) + ' '
-        print(r)
-
 playCount = 0
 while True :
     #try :
