@@ -119,8 +119,11 @@ def createGround(startX, startY, _count_mine = 40) :
                 count_mine -= 1
 
 playCount = 0
+printGround()
+print('타일 열기: [x좌표] [y좌표] (예: \'8 12\')')
+print('깃발 설치: [x좌표] [y좌표] f (예: \'9 16 f\')')
 while True :
-    #try :
+    try :
         pos = input().split(' ')
         pos[0] = int(pos[0])
         pos[1] = int(pos[1])
@@ -159,6 +162,6 @@ while True :
         if isGameEnded() == True :
             print('Win!')
             break
-    #except :
-        #print('invalid command')
+    except :
+        print('유효하지 않은 명령입니다.')
     
