@@ -293,4 +293,4 @@ class Game() :
         self.__didChangeBoard()
 
 
-game = Game(8, 8, 2).startGame()
+game = Game(60, 28, 336).startGame()
